@@ -1,0 +1,8 @@
+C:\Users\1533601\Desktop\poker\PokerGame\Poker\Poker\bin\Debug\Poker.exe.config
+C:\Users\1533601\Desktop\poker\PokerGame\Poker\Poker\bin\Debug\Poker.exe
+C:\Users\1533601\Desktop\poker\PokerGame\Poker\Poker\bin\Debug\Poker.pdb
+C:\Users\1533601\Desktop\poker\PokerGame\Poker\Poker\obj\Debug\Poker.csproj.AssemblyReference.cache
+C:\Users\1533601\Desktop\poker\PokerGame\Poker\Poker\obj\Debug\Poker.csproj.SuggestedBindingRedirects.cache
+C:\Users\1533601\Desktop\poker\PokerGame\Poker\Poker\obj\Debug\Poker.csproj.CoreCompileInputs.cache
+C:\Users\1533601\Desktop\poker\PokerGame\Poker\Poker\obj\Debug\Poker.exe
+C:\Users\1533601\Desktop\poker\PokerGame\Poker\Poker\obj\Debug\Poker.pdb

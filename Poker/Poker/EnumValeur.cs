@@ -1,6 +1,6 @@
 ﻿namespace PokerGame
 {
-    enum Valeur
+    public enum Valeur
     {
         Deux =2,
         Trois,
@@ -16,7 +16,7 @@
         Roi,
         As,
     }
-    enum Couleur
+    public enum Couleur
     {
         Coueur,
         Pique,

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PokerGame
 {
-    internal class Carte
+    public class Carte
     {
         Valeur maValeur;
         Couleur maCouleur;
@@ -16,15 +16,17 @@ namespace PokerGame
         {
             this.maValeur = maValeur;
             this.maCouleur = maCouleur;
+            this.visible = false;
         }
         
         public int Commparer(Carte laCarte)
         {
-            throw new NotImplementedException();
+            int laComparaison = this.maValeur - laCarte.maValeur;
+            return Math.Abs(laComparaison);
         }
         public void Retoruner()
         {
-            throw new NotImplementedException();
+            this.visible = true;
         }
     }
 }

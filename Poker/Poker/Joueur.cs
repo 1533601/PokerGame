@@ -26,7 +26,24 @@ namespace PokerGame
         }
         public void Miser(int montant)
         {
-            throw new NotImplementedException();
+            Console.Clear();
+            bool verif;
+            int laMise;
+            Console.WriteLine("Comment d'argent voulez-vous miser");
+            do
+            {
+                Console.ReadLine();
+                verif = int.TryParse(Console.ReadLine(), out laMise);
+            }
+            while (verif == false);
+            if(laMise > montant)
+            {
+                Console.WriteLine("fond insuffisant");
+            }
+            else
+            {
+                this.argent = this.argent - laMise;
+            }
         }
         public void Check()
         {
