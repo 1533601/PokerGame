@@ -12,23 +12,33 @@ namespace PokerGame
         
         public Paquet()
         {
-            cartes = new List<Carte>();
+            Reinitialiser();
+            Brasser();
         }
         public void Distribuer(Joueur j)
         {
-            throw new NotImplementedException();
+            
         }
         public void Reinitialiser()
         {
-            throw new NotImplementedException();
+            this.cartes.Clear();
+            for (int i = 2; i < 15; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    this.cartes.Add(new Carte((Valeur)i, (Couleur)j));
+                }
+            }
         }
         public void Brasser()
         {
-            throw new NotImplementedException();
+            Random rand = new Random();
+            this.cartes = cartes.OrderBy(x => rand.Next()).ToList();
         }
         public Carte GetTopCarte()
         {
-            throw new NotImplementedException();
+            return this.cartes[0];
+            this.cartes.RemoveAt(0);
         }
     }
 }
