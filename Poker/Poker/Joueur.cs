@@ -12,7 +12,7 @@ namespace PokerGame
     {
         string nom;
         string pseudo;
-        int argent;
+        public int argent { get; set; }
         bool actif;
         public MainJoueur maMain { get; set; }
 
@@ -47,24 +47,34 @@ namespace PokerGame
         }
         public void Check()
         {
+            Console.Clear();
             Console.WriteLine("Vous avez check");
         }
         public void Call()
         {
-            
+            Console.Clear();
+            Console.WriteLine("Vous avez call");
         }
         public void Coucher()
         {
+            Console.Clear();
             this.actif = false;
             Console.WriteLine("Vous vous êtes coucher");
         }
         public void Raise(int montant)
         {
-            throw new NotImplementedException();
+            if(this.argent > montant)
+            {
+                this.argent = 0;
+            }
+            else
+            {
+                this.argent = this.argent - montant;
+            }
         }
         public void ResetMain()
         {
-            throw new NotImplementedException();
+            this.maMain = null;
         }
     }
 }

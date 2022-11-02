@@ -11,7 +11,7 @@ namespace PokerGame
     {
         Valeur maValeur;
         Couleur maCouleur;
-        bool visible;
+        bool visible { get; set; }
         public Carte(Valeur maValeur, Couleur maCouleur)
         {
             this.maValeur = maValeur;
