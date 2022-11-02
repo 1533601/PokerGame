@@ -16,8 +16,9 @@ namespace PokerGame
             Brasser();
         }
         public void Distribuer(Joueur j)
-        {
-            
+        {       
+            MainJoueur mainInit =  new MainJoueur(Tuple.Create(GetTopCarte(), GetTopCarte()));
+            j.maMain = mainInit;
         }
         public void Reinitialiser()
         {

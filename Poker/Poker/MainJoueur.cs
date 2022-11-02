@@ -10,12 +10,11 @@ namespace PokerGame
     internal class MainJoueur
     {
         Tuple<Carte, Carte> cartes;
-        int force;
+        int force { get; set; }
 
-        public MainJoueur(Tuple<Carte, Carte> cartes, int force)
+        public MainJoueur(Tuple<Carte, Carte> cartes)
         {
             this.cartes = cartes;
-            this.force = force;
         }
         public int Comparer(MainJoueur laMainJoueur)
         {
