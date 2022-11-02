@@ -47,15 +47,16 @@ namespace PokerGame
         }
         public void Check()
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Vous avez check");
         }
         public void Call()
         {
-            throw new NotImplementedException();
+            
         }
         public void Coucher()
         {
-            throw new NotImplementedException();
+            this.actif = false;
+            Console.WriteLine("Vous vous êtes coucher");
         }
         public void Raise(int montant)
         {
