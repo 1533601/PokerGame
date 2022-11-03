@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace PokerGame
 {
-    public class Carte
+    internal class Carte
     {
         Valeur maValeur;
         Couleur maCouleur;
-        bool visible { get; set; }
+        public bool visible { get; set; }
         public Carte(Valeur maValeur, Couleur maCouleur)
         {
             this.maValeur = maValeur;

@@ -10,18 +10,18 @@ namespace PokerGame
 {
     internal class Joueur
     {
-        string nom;
-        string pseudo;
+        public string nom { get; set; }
+        public string pseudo { get; set; }
         public int argent { get; set; }
-        bool actif;
+        public bool actif { get; set; }
         public MainJoueur maMain { get; set; }
 
-        public Joueur(string nom, string pseudo, int argent, bool actif, MainJoueur maMain)
+        public Joueur(string nom, string pseudo, int argent, MainJoueur maMain)
         {
             this.nom = nom;
             this.pseudo = pseudo;
             this.argent = argent;
-            this.actif = actif;
+            this.actif = true;
             this.maMain = maMain;
         }
         public void Miser(int montant)

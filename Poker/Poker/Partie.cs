@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,20 +10,55 @@ namespace PokerGame
     internal class Partie
     {
         List<Joueur> joueurs;
-        int indiceJoueurCouran;
+        int indiceJoueurCourant =0;
         Paquet lePaquet;
         int tour;
 
-        public Partie(List<Joueur> joueurs, int indiceJoueurCouran, Paquet lePaquet, int tour)
+        public Partie(List<Joueur> joueurs, Paquet lePaquet)
         {
             this.joueurs = joueurs;
-            this.indiceJoueurCouran = indiceJoueurCouran;
             this.lePaquet = lePaquet;
-            this.tour = tour;
         }
         public void JouerTour()
         {
-            throw new NotImplementedException();
+            this.tour = 0;
+            bool verif;
+            int choix;
+            do
+            {
+                Console.Clear();
+                Console.WriteLine("Que voulez-vous faire");
+                Console.WriteLine("1: Miser");
+                Console.WriteLine("2: Check");
+                Console.WriteLine("3: Call");
+                Console.WriteLine("4: Raise");
+                Console.WriteLine("5: Coucher");
+                verif = int.TryParse(Console.ReadLine(), out choix);
+            }
+            while (verif == false && choix > 5 || 0 < choix);
+
+
+            for (int i = 0; i < this.joueurs.Count(); i++)
+            {
+                switch (choix)
+                {
+                    case 1:
+                        this.joueurs[i].Miser(this.joueurs[i].argent);
+                        break;
+                    case 2:
+                        this.joueurs[i].Check();
+                        break;
+                    case 3:
+                        this.joueurs[i].Call();
+                        break;
+                    case 4:
+                        this.joueurs[i].Raise(this.joueurs[i].argent);
+                        break;
+                    case 5:
+                        this.joueurs[i].Coucher();
+                        break;
+                }
+            }
         }
         public int GetGagnant(List<Joueur> joueurs)
         {
