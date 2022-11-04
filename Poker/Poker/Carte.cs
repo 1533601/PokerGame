@@ -9,8 +9,8 @@ namespace PokerGame
 {
     internal class Carte
     {
-        Valeur maValeur;
-        Couleur maCouleur;
+        public Valeur maValeur { get; set; }
+        public Couleur maCouleur { get; set; }
         public bool visible { get; set; }
         public Carte(Valeur maValeur, Couleur maCouleur)
         {

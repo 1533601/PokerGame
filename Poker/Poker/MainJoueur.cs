@@ -9,7 +9,7 @@ namespace PokerGame
 {
     internal class MainJoueur
     {
-        Tuple<Carte, Carte> cartes;
+        public Tuple<Carte, Carte> cartes { get; set; }
         int force { get; set; }
 
         public MainJoueur(Tuple<Carte, Carte> cartes)
