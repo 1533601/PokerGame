@@ -10,53 +10,74 @@ namespace PokerGame
     internal class Partie
     {
         Joueur[] joueurs = new Joueur[4];
-        int indiceJoueurCourant =0;
+        int indiceJoueurCourant = 3;
         Paquet lePaquet;
-        int tour;
+        public int tour { get; set; }
+        Carte[] river = new Carte[5];
+        public int potsTotal { get; set; }
 
         public Partie(Joueur[] joueurs, Paquet lePaquet)
         {
             this.joueurs = joueurs;
             this.lePaquet = lePaquet;
+            for (int i = 0; i < river.Length; i++)
+            {
+                river[i] = this.lePaquet.GetTopCarte();
+            }
             
         }
+        /// <summary>
+        /// Jouer un tour
+        /// </summary>
         public void JouerTour()
         {
-            this.tour = 0;
             bool verif;
             int choix;
             for (int i = 0; i < this.joueurs.Count(); i++)
             {
-                do
+                if (this.joueurs[i].actif == true)
                 {
-                    Console.Clear();
-                    AfficherJeu();
-                    Console.WriteLine("Que voulez-vous faire " + this.joueurs[i].nom);
-                    Console.WriteLine("1: Miser");
-                    Console.WriteLine("2: Check");
-                    Console.WriteLine("3: Call");
-                    Console.WriteLine("4: Raise");
-                    Console.WriteLine("5: Coucher");
-                    verif = int.TryParse(Console.ReadLine(), out choix);
-                }
-                while (verif == false && choix < 5 || 0 > choix);
+                    do
+                    {
+
+                        AfficherJeu();
+                        Console.BackgroundColor = ConsoleColor.Black;
+                        Console.ForegroundColor = ConsoleColor.White;
+                        Console.SetCursorPosition(76, 8);
+                        
+                        Console.WriteLine(this.potsTotal + "\u0024");
+                        Console.ForegroundColor = ConsoleColor.DarkGreen;
+                        Console.SetCursorPosition(0, 5);
+                        Console.WriteLine(this.joueurs[i].pseudo +" que voulez-vous faire");
+                        Console.SetCursorPosition(0, 6);
+                        Console.WriteLine("1: Call");
+                        Console.SetCursorPosition(0, 7);
+                        Console.WriteLine("2: Raise");
+                        Console.SetCursorPosition(0, 8);
+                        Console.WriteLine("3: Coucher");
+                        verif = int.TryParse(Console.ReadLine(), out choix);
+                    }
+                    while (verif == false && choix > 4 && 0 > choix);
                     switch (choix)
                     {
                         case 1:
-                            this.joueurs[i].Miser(this.joueurs[i].argent);
-                            break;
-                        case 2:
-                            this.joueurs[i].Check();
-                            break;
-                        case 3:
                             this.joueurs[i].Call();
                             break;
-                        case 4:
-                            this.joueurs[i].Raise(this.joueurs[i].argent);
+                        case 2:
+                            this.joueurs[i].Raise(this.joueurs[indiceJoueurCourant].mise);
                             break;
-                        case 5:
+                        case 3:
                             this.joueurs[i].Coucher();
                             break;
+                        default:
+                            break;
+                    }
+                    this.potsTotal = this.potsTotal + this.joueurs[i].mise;
+                }
+                this.indiceJoueurCourant++;
+                if(this.indiceJoueurCourant == 4)
+                {
+                    this.indiceJoueurCourant = 0;
                 }
             }
         }
@@ -64,27 +85,22 @@ namespace PokerGame
         {
             throw new NotImplementedException();
         }
-        public void AfficherJeu()
+        /// <summary>
+        /// Affichage
+        /// </summary>
+        private void AfficherJeu()
         {
-            Carte[] river = new Carte[5];
-
-            for (int i = 0; i < river.Length; i++)
-            {
-                river[i] = this.lePaquet.GetTopCarte();
-            }
-
-
             ///table de jeux
             Console.BackgroundColor = ConsoleColor.DarkGreen;
             Console.ForegroundColor = ConsoleColor.DarkGreen;
-            Console.SetCursorPosition(15, 13);
+            Console.SetCursorPosition(35, 13);
             Console.WriteLine("------------------------------------------------------------------------------------");
             for (int i = 0; i < 11; i++)
             {
-                Console.SetCursorPosition(15, 14 + i);
+                Console.SetCursorPosition(35, 14 + i);
                 Console.WriteLine("|                                                                                  |");
             }
-            Console.SetCursorPosition(15, 25);
+            Console.SetCursorPosition(35, 25);
             Console.WriteLine("------------------------------------------------------------------------------------");
             //-------------------------------------------------------
 
@@ -96,10 +112,17 @@ namespace PokerGame
             }
             if (this.tour == 2)
             {
+                river[0].Retoruner();
+                river[1].Retoruner();
+                river[2].Retoruner();
                 river[3].Retoruner();
             }
             if (this.tour == 3)
             {
+                river[0].Retoruner();
+                river[1].Retoruner();
+                river[2].Retoruner();
+                river[3].Retoruner();
                 river[4].Retoruner();
             }
 
@@ -108,170 +131,183 @@ namespace PokerGame
             {
                 Console.BackgroundColor = ConsoleColor.White;
                 Console.ForegroundColor = ConsoleColor.White;
-                Console.SetCursorPosition(20, 16);
+                Console.SetCursorPosition(40, 16);
                 Console.WriteLine("----------");
                 for (int i = 0; i < 5; i++)
                 {
-                    Console.SetCursorPosition(20, 17 + i);
+                    Console.SetCursorPosition(40, 17 + i);
                     Console.WriteLine("|        |");
                 }
-                Console.SetCursorPosition(20, 22);
+                Console.SetCursorPosition(40, 22);
                 Console.WriteLine("----------");
             }
 
             else
             {
-                CouleurAffichage(river[0]);
-                Console.SetCursorPosition(20, 16);
-                Console.WriteLine(nombreCarte(river[0]) + "" + FormeCarte(river[0]));
-                Console.SetCursorPosition(28, 22);
-                Console.WriteLine(nombreCarte(river[0]) + "" + FormeCarte(river[0]));
-
+                Console.BackgroundColor = ConsoleColor.White;
                 Console.ForegroundColor = ConsoleColor.White;
-                Console.SetCursorPosition(20, 16);
+                Console.SetCursorPosition(40, 16);
                 Console.WriteLine("----------");
                 for (int i = 0; i < 5; i++)
                 {
-                    Console.SetCursorPosition(20, 17 + i);
+                    Console.SetCursorPosition(40, 17 + i);
                     Console.WriteLine("|        |");
                 }
-                Console.SetCursorPosition(20, 22);
+                Console.SetCursorPosition(40, 22);
                 Console.WriteLine("----------");
+                CouleurAffichage(river[0]);
+                Console.SetCursorPosition(40, 16);
+                Console.WriteLine(nombreCarte(river[0]) + "" + FormeCarte(river[0]));
+                Console.SetCursorPosition(47, 22);
+                Console.WriteLine(nombreCarte(river[0]) + "" + FormeCarte(river[0]));
             }
 
             //carte2
             if (river[1].visible == false)
             {
-                Console.SetCursorPosition(36, 16);
+                Console.BackgroundColor = ConsoleColor.White;
+                
+                Console.SetCursorPosition(56, 16);
                 Console.WriteLine("----------");
                 for (int i = 0; i < 5; i++)
                 {
-                    Console.SetCursorPosition(36, 17 + i);
+                    Console.SetCursorPosition(56, 17 + i);
                     Console.WriteLine("|        |");
                 }
-                Console.SetCursorPosition(36, 22);
+                Console.SetCursorPosition(56, 22);
                 Console.WriteLine("----------");
             }
             else
             {
-                CouleurAffichage(river[1]);
-                Console.SetCursorPosition(36, 16);
-                Console.WriteLine(nombreCarte(river[1]) + "" + FormeCarte(river[1]));
-                Console.SetCursorPosition(44, 22);
-                Console.WriteLine(nombreCarte(river[1]) + "" + FormeCarte(river[1]));
-
+                Console.BackgroundColor = ConsoleColor.White;
+ 
                 Console.ForegroundColor = ConsoleColor.White;
-                Console.SetCursorPosition(36, 16);
+                Console.SetCursorPosition(56, 16);
                 Console.WriteLine("----------");
                 for (int i = 0; i < 5; i++)
                 {
-                    Console.SetCursorPosition(36, 17 + i);
+                    Console.SetCursorPosition(56, 17 + i);
                     Console.WriteLine("|        |");
                 }
-                Console.SetCursorPosition(36, 22);
+                Console.SetCursorPosition(56, 22);
                 Console.WriteLine("----------");
+                CouleurAffichage(river[1]);
+                Console.SetCursorPosition(56, 16);
+                Console.WriteLine(nombreCarte(river[1]) + "" + FormeCarte(river[1]));
+                Console.SetCursorPosition(63, 22);
+                Console.WriteLine(nombreCarte(river[1]) + "" + FormeCarte(river[1]));
+
             }
 
 
             //carte3
             if (river[2].visible == false)
             {
-                Console.SetCursorPosition(52, 16);
+                Console.BackgroundColor = ConsoleColor.White;
+                
+                Console.SetCursorPosition(72, 16);
                 Console.WriteLine("----------");
                 for (int i = 0; i < 5; i++)
                 {
-                    Console.SetCursorPosition(52, 17 + i);
+                    Console.SetCursorPosition(72, 17 + i);
                     Console.WriteLine("|        |");
                 }
-                Console.SetCursorPosition(52, 22);
+                Console.SetCursorPosition(72, 22);
                 Console.WriteLine("----------");
             }
             else
             {
-                CouleurAffichage(river[2]);
-                Console.SetCursorPosition(52, 16);
-                Console.WriteLine(nombreCarte(river[2]) + "" + FormeCarte(river[2]));
-                Console.SetCursorPosition(60, 22);
-                Console.WriteLine(nombreCarte(river[2]) + "" + FormeCarte(river[2]));
-
+                Console.BackgroundColor = ConsoleColor.White;
                 Console.ForegroundColor = ConsoleColor.White;
-                Console.SetCursorPosition(52, 16);
+                Console.SetCursorPosition(72, 16);
                 Console.WriteLine("----------");
                 for (int i = 0; i < 5; i++)
                 {
-                    Console.SetCursorPosition(52, 17 + i);
+                    Console.SetCursorPosition(72, 17 + i);
                     Console.WriteLine("|        |");
                 }
-                Console.SetCursorPosition(52, 22);
+                Console.SetCursorPosition(72, 22);
                 Console.WriteLine("----------");
+                CouleurAffichage(river[2]);
+                Console.SetCursorPosition(72, 16);
+                Console.WriteLine(nombreCarte(river[2]) + "" + FormeCarte(river[2]));
+                Console.SetCursorPosition(79, 22);
+                Console.WriteLine(nombreCarte(river[2]) + "" + FormeCarte(river[2]));
             }
 
 
             //carte4
             if (river[3].visible == false)
             {
-                Console.SetCursorPosition(68, 16);
+                Console.BackgroundColor = ConsoleColor.White;
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.SetCursorPosition(88, 16);
                 Console.WriteLine("----------");
                 for (int i = 0; i < 5; i++)
                 {
-                    Console.SetCursorPosition(68, 17 + i);
+                    Console.SetCursorPosition(88, 17 + i);
                     Console.WriteLine("|        |");
                 }
-                Console.SetCursorPosition(68, 22);
+                Console.SetCursorPosition(88, 22);
                 Console.WriteLine("----------");
             }
             else
             {
-                CouleurAffichage(river[3]);
-                Console.SetCursorPosition(68, 16);
-                Console.WriteLine(nombreCarte(river[3]) + "" + FormeCarte(river[3]));
-                Console.SetCursorPosition(76, 22);
-                Console.WriteLine(nombreCarte(river[3]) + "" + FormeCarte(river[3]));
-
+                Console.BackgroundColor = ConsoleColor.White;
                 Console.ForegroundColor = ConsoleColor.White;
-                Console.SetCursorPosition(68, 16);
+                Console.SetCursorPosition(88, 16);
                 Console.WriteLine("----------");
                 for (int i = 0; i < 5; i++)
                 {
-                    Console.SetCursorPosition(68, 17 + i);
+                    Console.SetCursorPosition(88, 17 + i);
                     Console.WriteLine("|        |");
                 }
-                Console.SetCursorPosition(68, 22);
+                Console.SetCursorPosition(88, 22);
                 Console.WriteLine("----------");
+                CouleurAffichage(river[3]);
+                Console.SetCursorPosition(88, 16);
+                Console.WriteLine(nombreCarte(river[3]) + "" + FormeCarte(river[3]));
+                Console.SetCursorPosition(95, 22);
+                Console.WriteLine(nombreCarte(river[3]) + "" + FormeCarte(river[3]));
             }
 
 
             //carte5
             if (river[4].visible == false)
             {
-                Console.SetCursorPosition(84, 16);
+                Console.BackgroundColor = ConsoleColor.White;
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.SetCursorPosition(104, 16);
                 Console.WriteLine("----------");
                 for (int i = 0; i < 5; i++)
                 {
-                    Console.SetCursorPosition(84, 17 + i);
+                    Console.SetCursorPosition(104, 17 + i);
                     Console.WriteLine("|        |");
                 }
-                Console.SetCursorPosition(84, 22);
+                Console.SetCursorPosition(104, 22);
                 Console.WriteLine("----------");
             }
             else
             {
-                CouleurAffichage(river[4]);
-                Console.SetCursorPosition(84, 16);
-                Console.WriteLine(nombreCarte(river[4]) + "" + FormeCarte(river[4]));
-                Console.SetCursorPosition(92, 22);
-                Console.WriteLine(nombreCarte(river[4]) + "" + FormeCarte(river[4]));
+                Console.ForegroundColor = ConsoleColor.White;
+                
 
                 Console.ForegroundColor = ConsoleColor.White;
-                Console.SetCursorPosition(84, 16);
+                Console.SetCursorPosition(104, 16);
                 Console.WriteLine("----------");
                 for (int i = 0; i < 5; i++)
                 {
-                    Console.SetCursorPosition(84, 17 + i);
+                    Console.SetCursorPosition(104, 17 + i);
                     Console.WriteLine("|        |");
                 }
-                Console.SetCursorPosition(84, 22);
+                Console.SetCursorPosition(104, 22);
                 Console.WriteLine("----------");
+
+                CouleurAffichage(river[4]);
+                Console.SetCursorPosition(104, 16);
+                Console.WriteLine(nombreCarte(river[4]) + "" + FormeCarte(river[4]));
+                Console.SetCursorPosition(111, 22);
+                Console.WriteLine(nombreCarte(river[4]) + "" + FormeCarte(river[4]));
             }
 
             //-------------------------
@@ -280,215 +316,220 @@ namespace PokerGame
 
             //nom joueur 1
             Console.BackgroundColor = ConsoleColor.Black;
-            Console.SetCursorPosition(20, 1);
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.SetCursorPosition(40, 1);
             Console.WriteLine(this.joueurs[0].pseudo);
 
             //montent joueur 1
 
-            Console.SetCursorPosition(36, 1);
-            Console.WriteLine(this.joueurs[0].argent);
+            Console.SetCursorPosition(56, 1);
+            Console.WriteLine(this.joueurs[0].argent + "\u0024");
 
             //premier carte joueur 1
 
 
             Console.BackgroundColor = ConsoleColor.White;
             Console.ForegroundColor = ConsoleColor.White;
-            Console.SetCursorPosition(20, 3);
+            Console.SetCursorPosition(40, 3);
             Console.WriteLine("----------");
             for (int i = 0; i < 5; i++)
             {
-                Console.SetCursorPosition(20, 4 + i);
+                Console.SetCursorPosition(40, 4 + i);
                 Console.WriteLine("|        |");
             }
-            Console.SetCursorPosition(20, 9);
+            Console.SetCursorPosition(40, 9);
             Console.WriteLine("----------");
 
             CouleurAffichage(this.joueurs[0].maMain.cartes.Item1);
-            Console.SetCursorPosition(20, 3);
-            Console.WriteLine(nombreCarte(this.joueurs[0].maMain.cartes.Item1) + " " + FormeCarte(this.joueurs[0].maMain.cartes.Item1));
-            Console.SetCursorPosition(28, 9);
-            Console.WriteLine(nombreCarte(this.joueurs[0].maMain.cartes.Item1) + " " + FormeCarte(this.joueurs[0].maMain.cartes.Item1));
+            Console.SetCursorPosition(40, 3);
+            Console.WriteLine(nombreCarte(this.joueurs[0].maMain.cartes.Item1) + "" + FormeCarte(this.joueurs[0].maMain.cartes.Item1));
+            Console.SetCursorPosition(47, 9);
+            Console.WriteLine(nombreCarte(this.joueurs[0].maMain.cartes.Item1) + "" + FormeCarte(this.joueurs[0].maMain.cartes.Item1));
             //this.joueurs[0].cart1
 
             //deuxiem carete joueur 1
 
             Console.ForegroundColor = ConsoleColor.White;
-            Console.SetCursorPosition(36, 3);
+            Console.SetCursorPosition(56, 3);
             Console.WriteLine("----------");
             for (int i = 0; i < 5; i++)
             {
-                Console.SetCursorPosition(36, 4 + i);
+                Console.SetCursorPosition(56, 4 + i);
                 Console.WriteLine("|        |");
             }
-            Console.SetCursorPosition(36, 9);
+            Console.SetCursorPosition(56, 9);
             Console.WriteLine("----------");
 
             CouleurAffichage(this.joueurs[0].maMain.cartes.Item2);
-            Console.SetCursorPosition(36, 3);
-            Console.WriteLine(nombreCarte(this.joueurs[0].maMain.cartes.Item2) + " " + FormeCarte(this.joueurs[0].maMain.cartes.Item2));
-            Console.SetCursorPosition(44, 9);
-            Console.WriteLine(nombreCarte(this.joueurs[0].maMain.cartes.Item2) + " " + FormeCarte(this.joueurs[0].maMain.cartes.Item2));
+            Console.SetCursorPosition(56, 3);
+            Console.WriteLine(nombreCarte(this.joueurs[0].maMain.cartes.Item2) + "" + FormeCarte(this.joueurs[0].maMain.cartes.Item2));
+            Console.SetCursorPosition(63, 9);
+            Console.WriteLine(nombreCarte(this.joueurs[0].maMain.cartes.Item2) + "" + FormeCarte(this.joueurs[0].maMain.cartes.Item2));
             //this.joueurs[0].cart1
             //-------------------------------
 
             //nom joueur 2
             Console.BackgroundColor = ConsoleColor.Black;
-            Console.SetCursorPosition(68, 1);
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.SetCursorPosition(88, 1);
             Console.WriteLine(this.joueurs[1].pseudo);
 
             //montent joueur 2
 
-            Console.SetCursorPosition(84, 1);
-            Console.WriteLine(this.joueurs[1].argent);
+            Console.SetCursorPosition(104, 1);
+            Console.WriteLine(this.joueurs[1].argent + "\u0024");
 
             //premier carte joueur 2
 
             Console.BackgroundColor = ConsoleColor.White;
             Console.ForegroundColor = ConsoleColor.White;
-            Console.SetCursorPosition(68, 3);
+            Console.SetCursorPosition(88, 3);
             Console.WriteLine("----------");
             for (int i = 0; i < 5; i++)
             {
-                Console.SetCursorPosition(68, 4 + i);
+                Console.SetCursorPosition(88, 4 + i);
                 Console.WriteLine("|        |");
             }
-            Console.SetCursorPosition(68, 9);
+            Console.SetCursorPosition(88, 9);
             Console.WriteLine("----------");
 
             CouleurAffichage(this.joueurs[1].maMain.cartes.Item1);
-            Console.SetCursorPosition(68, 3);
-            Console.WriteLine(nombreCarte(this.joueurs[1].maMain.cartes.Item1) + " " + FormeCarte(this.joueurs[1].maMain.cartes.Item1));
-            Console.SetCursorPosition(76, 9);
-            Console.WriteLine(nombreCarte(this.joueurs[1].maMain.cartes.Item1) + " " + FormeCarte(this.joueurs[1].maMain.cartes.Item1));
+            Console.SetCursorPosition(88, 3);
+            Console.WriteLine(nombreCarte(this.joueurs[1].maMain.cartes.Item1) + "" + FormeCarte(this.joueurs[1].maMain.cartes.Item1));
+            Console.SetCursorPosition(95, 9);
+            Console.WriteLine(nombreCarte(this.joueurs[1].maMain.cartes.Item1) + "" + FormeCarte(this.joueurs[1].maMain.cartes.Item1));
             //this.joueurs[1].cart1
 
             //deuxiem carete joueur 2
 
             Console.ForegroundColor = ConsoleColor.White;
-            Console.SetCursorPosition(84, 3);
+            Console.SetCursorPosition(104, 3);
             Console.WriteLine("----------");
             for (int i = 0; i < 5; i++)
             {
-                Console.SetCursorPosition(84, 4 + i);
+                Console.SetCursorPosition(104, 4 + i);
                 Console.WriteLine("|        |");
             }
-            Console.SetCursorPosition(84, 9);
+            Console.SetCursorPosition(104, 9);
             Console.WriteLine("----------");
 
             CouleurAffichage(this.joueurs[1].maMain.cartes.Item2);
-            Console.SetCursorPosition(84, 3);
-            Console.WriteLine(nombreCarte(this.joueurs[1].maMain.cartes.Item2) + " " + FormeCarte(this.joueurs[1].maMain.cartes.Item2));
-            Console.SetCursorPosition(92, 9);
-            Console.WriteLine(nombreCarte(this.joueurs[1].maMain.cartes.Item2) + " " + FormeCarte(this.joueurs[1].maMain.cartes.Item2));
+            Console.SetCursorPosition(104, 3);
+            Console.WriteLine(nombreCarte(this.joueurs[1].maMain.cartes.Item2) + "" + FormeCarte(this.joueurs[1].maMain.cartes.Item2));
+            Console.SetCursorPosition(111, 9);
+            Console.WriteLine(nombreCarte(this.joueurs[1].maMain.cartes.Item2) + "" + FormeCarte(this.joueurs[1].maMain.cartes.Item2));
             //this.joueurs[1].cart1
             //------------------------------------
 
             //nom joueur 3
             Console.BackgroundColor = ConsoleColor.Black;
-            Console.SetCursorPosition(20, 38);
-            Console.WriteLine(this.joueurs[2].argent);
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.SetCursorPosition(40, 38);
+            Console.WriteLine(this.joueurs[2].argent + "\u0024");
 
             //montent joueur 3
 
-            Console.SetCursorPosition(36, 38);
+            Console.SetCursorPosition(56, 38);
             Console.WriteLine(this.joueurs[2].pseudo);
 
             //premier carte joueur 3
 
             Console.BackgroundColor = ConsoleColor.White;
             Console.ForegroundColor = ConsoleColor.White;
-            Console.SetCursorPosition(20, 30);
+            Console.SetCursorPosition(40, 30);
             Console.WriteLine("----------");
             for (int i = 0; i < 5; i++)
             {
-                Console.SetCursorPosition(20, 31 + i);
+                Console.SetCursorPosition(40, 31 + i);
                 Console.WriteLine("|        |");
             }
-            Console.SetCursorPosition(20, 36);
+            Console.SetCursorPosition(40, 36);
             Console.WriteLine("----------");
 
             CouleurAffichage(this.joueurs[2].maMain.cartes.Item1);
-            Console.SetCursorPosition(20, 30);
-            Console.WriteLine(nombreCarte(this.joueurs[2].maMain.cartes.Item1) + " " + FormeCarte(this.joueurs[2].maMain.cartes.Item1));
-            Console.SetCursorPosition(28, 30);
-            Console.WriteLine(nombreCarte(this.joueurs[2].maMain.cartes.Item1) + " " + FormeCarte(this.joueurs[2].maMain.cartes.Item1));
+            Console.SetCursorPosition(40, 30);
+            Console.WriteLine(nombreCarte(this.joueurs[2].maMain.cartes.Item1) + "" + FormeCarte(this.joueurs[2].maMain.cartes.Item1));
+            Console.SetCursorPosition(47, 36);
+            Console.WriteLine(nombreCarte(this.joueurs[2].maMain.cartes.Item1) + "" + FormeCarte(this.joueurs[2].maMain.cartes.Item1));
 
 
             //deuxiem carete joueur 3
 
             Console.ForegroundColor = ConsoleColor.White;
-            Console.SetCursorPosition(36, 30);
+            Console.SetCursorPosition(56, 30);
             Console.WriteLine("----------");
             for (int i = 0; i < 5; i++)
             {
-                Console.SetCursorPosition(36, 31 + i);
+                Console.SetCursorPosition(56, 31 + i);
                 Console.WriteLine("|        |");
             }
-            Console.SetCursorPosition(36, 36);
+            Console.SetCursorPosition(56, 36);
             Console.WriteLine("----------");
 
             CouleurAffichage(this.joueurs[2].maMain.cartes.Item2);
-            Console.SetCursorPosition(36, 30);
-            Console.WriteLine(nombreCarte(this.joueurs[2].maMain.cartes.Item2) + " " + FormeCarte(this.joueurs[2].maMain.cartes.Item2));
-            Console.SetCursorPosition(44, 30);
-            Console.WriteLine(nombreCarte(this.joueurs[2].maMain.cartes.Item2) + " " + FormeCarte(this.joueurs[2].maMain.cartes.Item2));
+            Console.SetCursorPosition(56, 30);
+            Console.WriteLine(nombreCarte(this.joueurs[2].maMain.cartes.Item2) + "" + FormeCarte(this.joueurs[2].maMain.cartes.Item2));
+            Console.SetCursorPosition(63, 36);
+            Console.WriteLine(nombreCarte(this.joueurs[2].maMain.cartes.Item2) + "" + FormeCarte(this.joueurs[2].maMain.cartes.Item2));
             //-------------------------------
             //this.joueurs[2].cart1
 
             //nom joueur 4
             Console.BackgroundColor = ConsoleColor.Black;
-            Console.SetCursorPosition(68, 38);
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.SetCursorPosition(88, 38);
             Console.WriteLine(this.joueurs[3].pseudo);
 
             //montent joueur 4
 
-            Console.SetCursorPosition(84, 38);
-            Console.WriteLine(this.joueurs[3].argent);
+            Console.SetCursorPosition(104, 38);
+            Console.WriteLine(this.joueurs[3].argent + "\u0024");
 
             //premier carte joueur 4
 
             Console.BackgroundColor = ConsoleColor.White;
             Console.ForegroundColor = ConsoleColor.White;
-            Console.SetCursorPosition(68, 30);
+            Console.SetCursorPosition(88, 30);
             Console.WriteLine("----------");
             for (int i = 0; i < 5; i++)
             {
-                Console.SetCursorPosition(68, 31 + i);
+                Console.SetCursorPosition(88, 31 + i);
                 Console.WriteLine("|        |");
             }
-            Console.SetCursorPosition(68, 36);
+            Console.SetCursorPosition(88, 36);
             Console.WriteLine("----------");
 
             CouleurAffichage(this.joueurs[3].maMain.cartes.Item1);
-            Console.SetCursorPosition(68, 30);
-            Console.WriteLine(nombreCarte(this.joueurs[3].maMain.cartes.Item1) + " " + FormeCarte(this.joueurs[3].maMain.cartes.Item1));
-            Console.SetCursorPosition(74, 30);
-            Console.WriteLine(nombreCarte(this.joueurs[3].maMain.cartes.Item1) + " " + FormeCarte(this.joueurs[3].maMain.cartes.Item1));
+            Console.SetCursorPosition(88, 30);
+            Console.WriteLine(nombreCarte(this.joueurs[3].maMain.cartes.Item1) + "" + FormeCarte(this.joueurs[3].maMain.cartes.Item1));
+            Console.SetCursorPosition(95, 36);//asd
+            Console.WriteLine(nombreCarte(this.joueurs[3].maMain.cartes.Item1) + "" + FormeCarte(this.joueurs[3].maMain.cartes.Item1));
             //this.joueurs[3].cart1
 
             //deuxiem carete joueur 4
 
             Console.ForegroundColor = ConsoleColor.White;
-            Console.SetCursorPosition(84, 30);
+            Console.SetCursorPosition(104, 30);
             Console.WriteLine("----------");
             for (int i = 0; i < 5; i++)
             {
-                Console.SetCursorPosition(84, 31 + i);
+                Console.SetCursorPosition(104, 31 + i);
                 Console.WriteLine("|        |");
             }
-            Console.SetCursorPosition(84, 36);
+            Console.SetCursorPosition(104, 36);
             Console.WriteLine("----------");
 
             CouleurAffichage(this.joueurs[3].maMain.cartes.Item1);
-            Console.SetCursorPosition(84, 30);
-            Console.WriteLine(nombreCarte(this.joueurs[3].maMain.cartes.Item2) + " " + FormeCarte(this.joueurs[3].maMain.cartes.Item2));
-            Console.SetCursorPosition(92, 30);
-            Console.WriteLine(nombreCarte(this.joueurs[3].maMain.cartes.Item2) + " " + FormeCarte(this.joueurs[3].maMain.cartes.Item2));
+            Console.SetCursorPosition(104, 30);
+            Console.WriteLine(nombreCarte(this.joueurs[3].maMain.cartes.Item2) + "" + FormeCarte(this.joueurs[3].maMain.cartes.Item2));
+            Console.SetCursorPosition(111, 36);
+            Console.WriteLine(nombreCarte(this.joueurs[3].maMain.cartes.Item2) + "" + FormeCarte(this.joueurs[3].maMain.cartes.Item2));
 
             //------------------------------------
 
             //dealer
             Console.BackgroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.SetCursorPosition(1, 15);
             Console.WriteLine("BOB le dealer");
             Console.SetCursorPosition(5, 16);
@@ -521,6 +562,7 @@ namespace PokerGame
             Console.WriteLine("/");
             Console.SetCursorPosition(8, 23);
             Console.WriteLine("|");
+            Console.SetCursorPosition(0, 44);
         }
         public void UpdateGagnant(Joueur j)
         {
@@ -530,7 +572,11 @@ namespace PokerGame
         {
             throw new NotImplementedException();
         }
-        public void CouleurAffichage(Carte laCarte)
+        /// <summary>
+        /// Retourne la couleur de l'affichage
+        /// </summary>
+        /// <param name="laCarte"></param>
+        private void CouleurAffichage(Carte laCarte)
         {
             switch (laCarte.maCouleur)
             {
@@ -562,7 +608,12 @@ namespace PokerGame
                     break;
             }
         }
-        public char FormeCarte(Carte laCarte)
+        /// <summary>
+        /// Affiche le logo de la carte
+        /// </summary>
+        /// <param name="laCarte"></param>
+        /// <returns></returns>
+        private char FormeCarte(Carte laCarte)
         {
             char caractere;
             switch (laCarte.maCouleur)
@@ -601,49 +652,54 @@ namespace PokerGame
             }
             return caractere;
         }
-        public string nombreCarte(Carte laCarte)
+        /// <summary>
+        /// retourne le nombre pour L'affichage
+        /// </summary>
+        /// <param name="laCarte"></param>
+        /// <returns></returns>
+        private string nombreCarte(Carte laCarte)
         {
             string nombre;
             switch (laCarte.maValeur)
             {
                 case Valeur.Deux:
                     {
-                        nombre = "2";
+                        nombre = " 2";
                         break;
                     }
                 case Valeur.Trois:
                     {
-                        nombre = "3";
+                        nombre = " 3";
                         break;
                     }
                 case Valeur.Quatre:
                     {
-                        nombre = "4";
+                        nombre = " 4";
                         break;
                     }
                 case Valeur.Cinq:
                     {
-                        nombre = "5";
+                        nombre = " 5";
                         break;
                     }
                 case Valeur.Six:
                     {
-                        nombre = "6";
+                        nombre = " 6";
                         break;
                     }
                 case Valeur.Sept:
                     {
-                        nombre = "7";
+                        nombre = " 7";
                         break;
                     }
                 case Valeur.Huit:
                     {
-                        nombre = "8";
+                        nombre = " 8";
                         break;
                     }
                 case Valeur.Neuf:
                     {
-                        nombre = "9";
+                        nombre = " 9";
                         break;
                     }
                 case Valeur.Dix:
@@ -653,22 +709,22 @@ namespace PokerGame
                     }
                 case Valeur.Valet:
                     {
-                        nombre = "J";
+                        nombre = " J";
                         break;
                     }
                 case Valeur.reine:
                     {
-                        nombre = "Q";
+                        nombre = " Q";
                         break;
                     }
                 case Valeur.Roi:
                     {
-                        nombre = "R";
+                        nombre = " R";
                         break;
                     }
                 case Valeur.As:
                     {
-                        nombre = "A";
+                        nombre = " A";
                         break;
                     }
                 default:

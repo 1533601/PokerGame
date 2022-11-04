@@ -25,13 +25,19 @@ namespace Poker
                 {
                     Console.WriteLine("Comment d'argent à le joueur " + (i + 1));
                     verif = int.TryParse(Console.ReadLine(), out argent);
+                    Console.Clear();
                 }
                 while (verif == false);
                 MainJoueur laMain = new MainJoueur(Tuple.Create(lePaquet.GetTopCarte(), lePaquet.GetTopCarte()));
                 joueursPartie[i] = new Joueur(leNom, lePseudo, argent, laMain);
             }
             Partie laPartie = new Partie(joueursPartie, lePaquet);
-            laPartie.JouerTour();
+            do
+            {
+                laPartie.JouerTour();
+                laPartie.tour++;
+            }
+            while (laPartie.tour <= 3);
         }
     }
 }

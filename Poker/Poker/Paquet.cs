@@ -15,11 +15,18 @@ namespace PokerGame
             Reinitialiser();
             Brasser();
         }
+        /// <summary>
+        /// Distribue les cartes
+        /// </summary>
+        /// <param name="j"></param>
         public void Distribuer(Joueur j)
         {       
             MainJoueur mainInit =  new MainJoueur(Tuple.Create(GetTopCarte(), GetTopCarte()));
             j.maMain = mainInit;
         }
+        /// <summary>
+        /// Reset le packet ou l'initialise 
+        /// </summary>
         public void Reinitialiser()
         {
             this.cartes.Clear();
@@ -31,15 +38,23 @@ namespace PokerGame
                 }
             }
         }
+        /// <summary>
+        /// Brasse le paquet de Carte
+        /// </summary>
         public void Brasser()
         {
             Random rand = new Random();
             this.cartes = cartes.OrderBy(x => rand.Next()).ToList();
         }
+        /// <summary>
+        /// Obitent la carte au sommet du packet
+        /// </summary>
+        /// <returns></returns>
         public Carte GetTopCarte()
         {
-            return this.cartes[0];
             this.cartes.RemoveAt(0);
+            return this.cartes[0];
+            
         }
     }
 }
