@@ -26,7 +26,6 @@ namespace PokerGame
         }
         public void Miser(int montant)
         {
-            Console.Clear();
             bool verif;
             int laMise;
             Console.WriteLine("Comment d'argent voulez-vous miser");
@@ -36,7 +35,7 @@ namespace PokerGame
                 verif = int.TryParse(Console.ReadLine(), out laMise);
             }
             while (verif == false);
-            if(laMise > montant)
+            if(laMise < montant)
             {
                 Console.WriteLine("fond insuffisant");
             }
@@ -47,17 +46,14 @@ namespace PokerGame
         }
         public void Check()
         {
-            Console.Clear();
             Console.WriteLine("Vous avez check");
         }
         public void Call()
         {
-            Console.Clear();
             Console.WriteLine("Vous avez call");
         }
         public void Coucher()
         {
-            Console.Clear();
             this.actif = false;
             Console.WriteLine("Vous vous êtes coucher");
         }

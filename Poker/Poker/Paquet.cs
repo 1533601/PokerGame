@@ -8,7 +8,7 @@ namespace PokerGame
 {
     internal class Paquet
     {
-        List<Carte> cartes;
+        List<Carte> cartes = new List<Carte>();
         
         public Paquet()
         {

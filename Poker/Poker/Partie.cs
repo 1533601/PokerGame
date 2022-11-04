@@ -9,12 +9,12 @@ namespace PokerGame
 {
     internal class Partie
     {
-        List<Joueur> joueurs;
+        Joueur[] joueurs = new Joueur[4];
         int indiceJoueurCourant =0;
         Paquet lePaquet;
         int tour;
 
-        public Partie(List<Joueur> joueurs, Paquet lePaquet)
+        public Partie(Joueur[] joueurs, Paquet lePaquet)
         {
             this.joueurs = joueurs;
             this.lePaquet = lePaquet;
@@ -24,39 +24,38 @@ namespace PokerGame
             this.tour = 0;
             bool verif;
             int choix;
-            do
-            {
-                Console.Clear();
-                Console.WriteLine("Que voulez-vous faire");
-                Console.WriteLine("1: Miser");
-                Console.WriteLine("2: Check");
-                Console.WriteLine("3: Call");
-                Console.WriteLine("4: Raise");
-                Console.WriteLine("5: Coucher");
-                verif = int.TryParse(Console.ReadLine(), out choix);
-            }
-            while (verif == false && choix > 5 || 0 < choix);
-
-
             for (int i = 0; i < this.joueurs.Count(); i++)
             {
-                switch (choix)
+                do
                 {
-                    case 1:
-                        this.joueurs[i].Miser(this.joueurs[i].argent);
-                        break;
-                    case 2:
-                        this.joueurs[i].Check();
-                        break;
-                    case 3:
-                        this.joueurs[i].Call();
-                        break;
-                    case 4:
-                        this.joueurs[i].Raise(this.joueurs[i].argent);
-                        break;
-                    case 5:
-                        this.joueurs[i].Coucher();
-                        break;
+                    Console.Clear();
+                    AfficherJeu();
+                    Console.WriteLine("Que voulez-vous faire " + this.joueurs[i].nom);
+                    Console.WriteLine("1: Miser");
+                    Console.WriteLine("2: Check");
+                    Console.WriteLine("3: Call");
+                    Console.WriteLine("4: Raise");
+                    Console.WriteLine("5: Coucher");
+                    verif = int.TryParse(Console.ReadLine(), out choix);
+                }
+                while (verif == false && choix < 5 || 0 > choix);
+                    switch (choix)
+                    {
+                        case 1:
+                            this.joueurs[i].Miser(this.joueurs[i].argent);
+                            break;
+                        case 2:
+                            this.joueurs[i].Check();
+                            break;
+                        case 3:
+                            this.joueurs[i].Call();
+                            break;
+                        case 4:
+                            this.joueurs[i].Raise(this.joueurs[i].argent);
+                            break;
+                        case 5:
+                            this.joueurs[i].Coucher();
+                            break;
                 }
             }
         }
