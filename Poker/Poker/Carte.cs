@@ -38,7 +38,7 @@ namespace PokerGame
         /// <summary>
         /// Retourne la carte pour qu'elle devient visible ou invisible
         /// </summary>
-        public void RetorunerJouer()
+        public void RetournerCarteJoueur()
         {
             if (this.visible == true)
             {

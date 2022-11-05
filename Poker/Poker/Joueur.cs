@@ -10,7 +10,7 @@ namespace PokerGame
 {
     internal class Joueur
     {
-        public string nom { get; set; }
+        string nom;
         public string pseudo { get; set; }
         public int argent { get; set; }
         public bool actif { get; set; }
@@ -24,51 +24,22 @@ namespace PokerGame
             this.actif = true;
             this.maMain = maMain;
         }
-        /*public void Miser(int montant)
-        {
-            bool verif;
-            int laMise;
-            
-            Console.WriteLine("Comment d'argent voulez-vous miser");
-            do
-            {
-                Console.ReadLine();
-                verif = int.TryParse(Console.ReadLine(), out laMise);
-                Console.Clear();
-            }
-            while (verif == false);
-            if(laMise >= montant)
-            {
-                Console.WriteLine("fond insuffisant");
-                Console.Clear();
-            }
-            else
-            {
-                this.argent = this.argent - laMise;
-                pots = laMise;
-                potsTotal = potsTotal + pots;
-            }
-        }
-        */
-       /* public void Check()
-        {
-            Console.WriteLine("Vous avez check");
-            Console.Clear();
-        */
        /// <summary>
        /// Fonction Call au poker
        /// </summary>
        /// <returns></returns>
-        public int Call()
+        public int Call(int montant)
         {
 
             Console.ForegroundColor = ConsoleColor.DarkGreen;
             Console.BackgroundColor = ConsoleColor.Black;
             Console.WriteLine("Vous avez call");
-            this.argent = this.argent - this.mise;
-            
+            this.argent = this.argent - montant;
+            mise = montant;
+
+
             Console.Clear();
-            return mise;
+            return montant;
         }
         /// <summary>
         /// Usager se couche
@@ -97,18 +68,18 @@ namespace PokerGame
             
             do
             {
-                Console.WriteLine("de combient voulez vous raiser");
+                Console.WriteLine("Combien voulez-vous miser?");
                 verif = int.TryParse(Console.ReadLine(), out laMise);
                 Console.Clear();
                 
             }
             while (verif == false);
-            if (laMise >= this.argent)
+            if (laMise > this.argent)
             {
                 Console.ForegroundColor = ConsoleColor.DarkGreen;
                 Console.BackgroundColor = ConsoleColor.Black;
                 Console.WriteLine("fond insuffisant");
-                Console.Clear();
+                Raise(montant);
             }
             else
             {

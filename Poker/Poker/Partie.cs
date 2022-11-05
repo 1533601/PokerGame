@@ -10,11 +10,12 @@ namespace PokerGame
     internal class Partie
     {
         Joueur[] joueurs = new Joueur[4];
-        int indiceJoueurCourant = 3;
+        int indiceJoueurPrec = 3;
+        int indiceJoueurSuiv = 0;
         Paquet lePaquet;
         public int tour { get; set; }
         Carte[] river = new Carte[5];
-        public int potsTotal { get; set; }
+        int potsTotal;
 
         public Partie(Joueur[] joueurs, Paquet lePaquet)
         {
@@ -29,56 +30,74 @@ namespace PokerGame
         /// <summary>
         /// Jouer un tour
         /// </summary>
-        public void JouerTour()
+        public void JouerTour() //Problème de boucle au niveau du pari lorsque que le deuxième, troisième ou quatrième joueur raise
         {
             bool verif;
             int choix;
-            for (int i = 0; i < this.joueurs.Count(); i++)
+            int i;
+            do
             {
-                if (this.joueurs[i].actif == true)
+                for (i = 0; i < joueurs.Length; i++)
                 {
-                    do
+                    this.joueurs[i].maMain.cartes.Item1.RetournerCarteJoueur();
+                    this.joueurs[i].maMain.cartes.Item2.RetournerCarteJoueur();
+                    if (this.joueurs[i].actif == true)
                     {
+                        do
+                        {
+                            AfficherJeu();
+                            Console.BackgroundColor = ConsoleColor.Black;
+                            Console.ForegroundColor = ConsoleColor.White;
+                            Console.SetCursorPosition(76, 8);
 
-                        AfficherJeu();
-                        Console.BackgroundColor = ConsoleColor.Black;
-                        Console.ForegroundColor = ConsoleColor.White;
-                        Console.SetCursorPosition(76, 8);
-                        
-                        Console.WriteLine(this.potsTotal + "\u0024");
-                        Console.ForegroundColor = ConsoleColor.DarkGreen;
-                        Console.SetCursorPosition(0, 5);
-                        Console.WriteLine(this.joueurs[i].pseudo +" que voulez-vous faire");
-                        Console.SetCursorPosition(0, 6);
-                        Console.WriteLine("1: Call");
-                        Console.SetCursorPosition(0, 7);
-                        Console.WriteLine("2: Raise");
-                        Console.SetCursorPosition(0, 8);
-                        Console.WriteLine("3: Coucher");
-                        verif = int.TryParse(Console.ReadLine(), out choix);
+                            Console.WriteLine(this.potsTotal + "\u0024");
+                            Console.ForegroundColor = ConsoleColor.DarkGreen;
+                            Console.SetCursorPosition(0, 5);
+                            Console.WriteLine(this.joueurs[i].pseudo + " que voulez-vous faire");
+                            Console.SetCursorPosition(0, 6);
+                            Console.WriteLine("1: Call");
+                            Console.SetCursorPosition(0, 7);
+                            Console.WriteLine("2: Raise");
+                            Console.SetCursorPosition(0, 8);
+                            Console.WriteLine("3: Coucher");
+                            verif = int.TryParse(Console.ReadLine(), out choix);
+                        }
+                        while (verif == false && choix > 4 && 0 > choix);
+                        switch (choix)
+                        {
+                            case 1:
+                                this.joueurs[i].Call(this.joueurs[indiceJoueurPrec].mise);
+                                break;
+                            case 2:
+                                this.joueurs[i].Raise(this.joueurs[indiceJoueurPrec].mise);
+                                break;
+                            case 3:
+                                this.joueurs[i].Coucher();
+                                break;
+                            default:
+                                break;
+                        }
+                        this.potsTotal = this.potsTotal + this.joueurs[i].mise;
                     }
-                    while (verif == false && choix > 4 && 0 > choix);
-                    switch (choix)
+                    this.indiceJoueurPrec++;
+                    this.indiceJoueurSuiv++;
+                    if (this.indiceJoueurPrec == 4)
                     {
-                        case 1:
-                            this.joueurs[i].Call();
-                            break;
-                        case 2:
-                            this.joueurs[i].Raise(this.joueurs[indiceJoueurCourant].mise);
-                            break;
-                        case 3:
-                            this.joueurs[i].Coucher();
-                            break;
-                        default:
-                            break;
+                        this.indiceJoueurPrec = 0;
                     }
-                    this.potsTotal = this.potsTotal + this.joueurs[i].mise;
+                    if (this.indiceJoueurSuiv == 4)
+                    {
+                        this.indiceJoueurSuiv = 0;
+                    }
+                    this.joueurs[i].maMain.cartes.Item1.RetournerCarteJoueur();
+                    this.joueurs[i].maMain.cartes.Item2.RetournerCarteJoueur();
                 }
-                this.indiceJoueurCourant++;
-                if(this.indiceJoueurCourant == 4)
-                {
-                    this.indiceJoueurCourant = 0;
-                }
+                i--;
+            }
+            while (this.joueurs[i].mise != this.joueurs[indiceJoueurSuiv].mise || this.joueurs[i].mise != this.joueurs[indiceJoueurPrec].mise);
+            for(i = 0; i < this.joueurs.Length; i++)
+            {
+                this.joueurs[i].mise = 0;
             }
         }
         public int GetGagnant(List<Joueur> joueurs)

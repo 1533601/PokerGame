@@ -14,3 +14,11 @@ C:\Users\1830803\Desktop\poker2\PokerGame\Poker\Poker\obj\Debug\Poker.csproj.Sug
 C:\Users\1830803\Desktop\poker2\PokerGame\Poker\Poker\obj\Debug\Poker.csproj.CoreCompileInputs.cache
 C:\Users\1830803\Desktop\poker2\PokerGame\Poker\Poker\obj\Debug\Poker.exe
 C:\Users\1830803\Desktop\poker2\PokerGame\Poker\Poker\obj\Debug\Poker.pdb
+C:\Users\ti-gu\OneDrive\Bureau\PokerGame\Poker\Poker\bin\Debug\Poker.exe.config
+C:\Users\ti-gu\OneDrive\Bureau\PokerGame\Poker\Poker\bin\Debug\Poker.exe
+C:\Users\ti-gu\OneDrive\Bureau\PokerGame\Poker\Poker\bin\Debug\Poker.pdb
+C:\Users\ti-gu\OneDrive\Bureau\PokerGame\Poker\Poker\obj\Debug\Poker.csproj.AssemblyReference.cache
+C:\Users\ti-gu\OneDrive\Bureau\PokerGame\Poker\Poker\obj\Debug\Poker.csproj.SuggestedBindingRedirects.cache
+C:\Users\ti-gu\OneDrive\Bureau\PokerGame\Poker\Poker\obj\Debug\Poker.csproj.CoreCompileInputs.cache
+C:\Users\ti-gu\OneDrive\Bureau\PokerGame\Poker\Poker\obj\Debug\Poker.exe
+C:\Users\ti-gu\OneDrive\Bureau\PokerGame\Poker\Poker\obj\Debug\Poker.pdb

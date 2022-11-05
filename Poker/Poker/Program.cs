@@ -29,7 +29,7 @@ namespace Poker
                 }
                 while (verif == false);
                 MainJoueur laMain = new MainJoueur(Tuple.Create(lePaquet.GetTopCarte(), lePaquet.GetTopCarte()));
-                joueursPartie[i] = new Joueur(leNom, lePseudo, argent, laMain);
+                joueursPartie[i] = new Joueur(leNom, lePseudo, laMain);
             }
             Partie laPartie = new Partie(joueursPartie, lePaquet);
             do
